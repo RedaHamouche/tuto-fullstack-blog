@@ -3,6 +3,7 @@ const app = express();
 const articlesrouter = require("./routes/articles");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const Article = require("./models/article");
 require("dotenv/config");
 
 app.set("view engine", "ejs");
@@ -10,19 +11,9 @@ app.use(bodyParser.json());
 
 app.use(express.urlencoded({ extended: false }));
 
-app.get("/", (req, res) => {
-  const articles = [
-    {
-      title: "Test Article",
-      createdAt: new Date(),
-      description: "Test description"
-    },
-    {
-      title: "Test Article",
-      createdAt: new Date(),
-      description: "Test description"
-    }
-  ];
+app.get("/", async (req, res) => {
+  const articles = await Article.find();
+
   res.render("articles/index", {
     articles: articles
   });
